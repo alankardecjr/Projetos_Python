@@ -1,0 +1,49 @@
+"""Exemplo simples de abertura e inspeção de um arquivo.
+
+Este script abre 'dados.txt' em modo de leitura e exibe:
+
+* nome do arquivo
+* modo de abertura
+* estado de fechamento (closed)
+
+A utilização de um gerenciador de contexto (with) garante que o
+arquivo seja fechado automaticamente, mesmo que uma exceção ocorra.
+"""
+# adicionamos uma borda visual para destacar o início do programa
+print("=====================================================")
+print("|O programa começou, confirme as informações abaixo.|")
+print("=====================================================")
+
+# solicita ao usuário o nome do arquivo que será criado
+nome_arquivo = input("Digite o nome do arquivo que será criado: ")
+
+# usamos um gerenciador de contexto para lidar com o arquivo
+# modo 'w+' permite criar o arquivo se não existir e lê-lo/escrevê-lo
+try:
+    with open(nome_arquivo, 'w+', encoding='utf-8') as arquivo:
+        # obtém informações do objeto arquivo
+        print(f"Nome do arquivo: {arquivo.name}")
+        print(f"Modo de abertura: {arquivo.mode}")
+        print(f"Está fechado? {arquivo.closed}")
+
+        # o arquivo será fechado automaticamente ao sair do bloco
+        print("Dentro do bloco 'with': arquivo.closed =", arquivo.closed)
+
+except IOError as e:
+    print(f"Erro ao criar/abrir o arquivo: {e}")
+
+# verifica se o arquivo foi realmente fechado
+# a variável 'arquivo' ainda existe, mas o seu estado foi alterado
+try:
+    print(f"Após o bloco, o arquivo está fechado? {arquivo.closed}")
+except NameError:
+    print("Variável 'arquivo' não existe fora do contexto.")
+
+    # demonstração adicional de print com strings
+print("=====================================================")
+print("|O programa terminou, confirme as informações acima.|")
+print("=====================================================")
+
+# opcionalmente, podemos usar exit() para garantir que o programa termine aqui
+exit()
+
