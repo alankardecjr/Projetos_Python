@@ -1,0 +1,58 @@
+import os  # Importa o módulo os para operações de sistema, como remover arquivos
+
+# Seção 1: Entrada de dados do usuário
+# input() é uma função built-in que lê entrada do usuário via console
+# O parâmetro é a mensagem exibida ao usuário
+texto = input('Digite algum texto que será salvo em arquivo.txt: ')
+
+# Seção 2: Escrita em arquivo
+# Define o nome do arquivo a ser criado/usado
+essa_file = 'arquivo.txt'
+# Usa 'with' para gerenciar o contexto do arquivo: abre, escreve e fecha automaticamente
+# Modo 'w' (write) sobrescreve o arquivo se existir, ou cria se não existir
+# encoding='utf-8' garante suporte a caracteres especiais (acentos, etc.) em português
+with open(essa_file, 'w', encoding='utf-8') as arquivo:
+    # Escreve o texto digitado seguido de uma quebra de linha
+    # O '+' concatena strings; '\n' é o caractere de nova linha
+    arquivo.write(texto + '\n')
+
+# Seção 3: Leitura e exibição do conteúdo
+# Abre o arquivo em modo 'r' (read) para leitura
+# Novamente usa 'with' para gerenciamento automático de recursos
+with open(essa_file, 'r', encoding='utf-8') as arquivo:
+    # Exibe mensagem informativa
+    print('Conteúdo de arquivo.txt:')
+    # read() lê todo o conteúdo do arquivo como string
+    # print() exibe o conteúdo no console
+    print(arquivo.read())
+
+# Seção 4: Interação para exclusão opcional
+# Solicita confirmação do usuário para excluir o arquivo
+# strip() remove espaços em branco; lower() converte para minúsculas para case-insensitive
+resposta = input('Deseja excluir arquivo.txt? (s/n): ').strip().lower()
+# Estrutura condicional if-elif-else para tratar diferentes respostas
+if resposta == 's':
+    # Tenta remover o arquivo se a resposta for 's' (sim)
+    try:
+        # os.remove() deleta o arquivo especificado
+        os.remove(essa_file)
+        print('arquivo.txt removido com sucesso.')
+    except FileNotFoundError:
+        # Exceção se o arquivo não existir (embora deva existir neste ponto)
+        print('Arquivo não encontrado.')
+    except PermissionError:
+        # Exceção se não houver permissão para deletar (ex: arquivo em uso)
+        print('Permissão negada.')
+    except IsADirectoryError:
+        # Exceção se o caminho for um diretório em vez de arquivo
+        print('Não é possível remover, é um diretório.')
+    except Exception as e:
+        # Captura qualquer outro erro não previsto
+        print(f'Erro inesperado: {e}')
+elif resposta == 'n':
+    # Se a resposta for 'n' (não), informa que o arquivo foi mantido
+    print('arquivo.txt mantido.')
+else:
+    # Para qualquer outra resposta, informa inválida e não toma ação
+    print('Resposta inválida. Nenhuma ação tomada.')
+    

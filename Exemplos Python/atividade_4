@@ -1,0 +1,69 @@
+# Importa a biblioteca PIL (Pillow) para manipulação de imagens
+# PIL.Image permite abrir, processar e salvar imagens em diversos formatos
+from PIL import Image
+# Importa numpy para operações com arrays numéricos
+# Essencial para converter imagens em arrays e manipular dados binários
+import numpy as np
+
+def main():
+    """
+    Função principal: demonstra manipulação de imagens através de dados binários.
+    Mostra conversão imagem-array-binário, cópia de arquivos e modificação de bytes.
+    """
+    # Carrega a imagem original usando PIL
+    # Image.open() abre o arquivo de imagem e retorna um objeto Image
+    # O caminho é absoluto para garantir localização independente do diretório de execução
+    img = Image.open(r"C:\Users\akard\Pictures\Imagens\simple_icon.png")
+    # Exibe a imagem original na tela usando o visualizador padrão do sistema
+    img.show()
+
+    # Converte a imagem PIL em um array numpy
+    # np.array(img) transforma a imagem em um array multidimensional (altura x largura x canais)
+    # Cada pixel é representado por valores numéricos (0-255 para RGB)
+    img_data = np.array(img)
+    # Converte o array em bytes sequenciais usando tobytes()
+    # Isso cria uma representação binária linear da imagem
+    binary_data = img_data.tobytes()
+
+     # Salvar os dados binários em um arquivo
+    # Modo 'wb' (write binary) para escrever bytes diretamente
+    # Isso cria um arquivo binário contendo os dados da imagem
+    with open("original_img.bin", "wb") as file:
+        file.write(binary_data)
+
+    # Copiar o arquivo binário
+    # Abre o arquivo original em modo leitura binária ('rb')
+    with open("original_img.bin", "rb") as original_file:
+        data = original_file.read()
+    
+    with open("copy_img.bin", "wb") as copy_file:
+        copy_file.write(data)
+
+    # Manipulação dos dados do arquivo binário cópia
+    # Demonstra modificação de dados binários em nível de bytes
+    # Abre o arquivo cópia para leitura
+    with open("copy_img.bin", "rb") as file:
+        data = bytearray(file.read())
+    
+    # Inverte a ordem de todos os bytes usando slicing [::-1]
+    # Isso cria um efeito visual dramático na imagem quando reconstruída
+    data = data[::-1]
+
+    with open("copy_img.bin", "wb") as file:
+        file.write(data)
+
+    # Carregar e mostrar a imagem manipulada
+    # Reconstrói o array numpy a partir dos bytes modificados
+    # np.frombuffer() cria array de bytes, reshape() restaura as dimensões originais
+    modified_data = np.frombuffer(data, dtype=np.uint8).reshape(img_data.shape)
+    # Converte o array de volta em uma imagem PIL
+    modified_img = Image.fromarray(modified_data)
+    # Exibe a imagem modificada
+    modified_img.show()
+
+# Ponto de entrada do script
+if __name__ == "__main__":
+    main()
+    # exit() termina o programa explicitamente (opcional em scripts simples)
+    exit()
+    

@@ -1,0 +1,88 @@
+import os  # Módulo para interagir com o sistema operacional, como verificar existência de arquivos/diretórios e criar caminhos
+import shutil  # Módulo para operações de alto nível em arquivos, como mover ou copiar
+from pathlib import Path  # Classe Path do pathlib para manipulação moderna e cross-platform de caminhos de arquivo
+
+def criar_diretorios(diretorios):
+    """
+    Cria os diretórios especificados se eles não existirem.
+    Demonstra o uso de loops para processar listas e tratamento de exceções em operações de sistema de arquivos.
+    """
+    # Itera sobre cada diretório na lista fornecida
+    for diretorio in diretorios:
+        # Verifica se o diretório já existe para evitar tentativas desnecessárias
+        if not os.path.exists(diretorio):
+            try:
+                # Cria o diretório e subdiretórios pai se necessário (equivalente a mkdir -p no Unix)
+                os.makedirs(diretorio)
+                print(f"Diretório {diretorio} criado.")
+            except PermissionError:
+                # Trata erros de permissão, comuns em sistemas com controle de acesso
+                print(f"Sem permissão para criar o diretório {diretorio}.")
+            except Exception as e:
+                # Captura outros erros inesperados, como disco cheio ou caminhos inválidos
+                print(f"Erro inesperado ao criar {diretorio}: {e}")
+
+def mover_arquivos(diretorio_origem):
+    """
+    Move arquivos do diretório de origem para subdiretórios baseados na extensão.
+    Suporta extensões: pdf, txt, jpg.
+    Ilustra iteração sobre arquivos, extração de extensão e operações de movimento de arquivo.
+    """
+    # Lista todos os itens no diretório de origem
+    # os.listdir retorna apenas nomes, não caminhos completos
+    for arquivo in os.listdir(diretorio_origem):
+        # Constrói o caminho completo do arquivo para operações subsequentes
+        caminho_arquivo = os.path.join(diretorio_origem, arquivo)
+        # Verifica se é um arquivo (não um diretório) para evitar processar subdiretórios
+        if os.path.isfile(caminho_arquivo):
+            # Usa pathlib.Path para extrair a extensão de forma moderna e robusta
+            # .suffix retorna '.ext', .lower() para case-insensitive, .lstrip('.') remove o ponto
+            extensao = Path(arquivo).suffix.lower().lstrip('.')
+            # Verifica se a extensão está na lista de suportadas
+            if extensao in ['pdf', 'txt', 'jpg']:
+                # Define o diretório de destino baseado na extensão
+                diretorio_destino = os.path.join(diretorio_origem, extensao)
+                try:
+                    # Move o arquivo para o subdiretório correspondente
+                    # shutil.move é atômico e preserva metadados quando possível
+                    shutil.move(caminho_arquivo, os.path.join(diretorio_destino, arquivo))
+                    print(f"{arquivo} movido para {diretorio_destino}.")
+                except PermissionError:
+                    # Erro comum ao mover arquivos em sistemas com permissões restritas
+                    print(f"Sem permissão para mover {arquivo}.")
+                except Exception as e:
+                    # Outros erros, como arquivo em uso ou disco cheio
+                    print(f"Erro inesperado ao mover {arquivo}: {e}")
+            else:
+                # Informa sobre extensões não suportadas, útil para debugging e extensibilidade
+                print(f"Extensão {extensao} de {arquivo} não é suportada.")
+
+def main():
+    """
+    Função principal: define o diretório de trabalho, cria subdiretórios e move arquivos.
+    Demonstra organização de código em funções e fluxo de execução sequencial.
+    """
+    # Define o diretório base de trabalho
+    diretorio_trabalho = "diretorio_trabalho"
+    # Lista de subdiretórios a serem criados, usando os.path.join para compatibilidade
+    diretorios = [
+        os.path.join(diretorio_trabalho, 'pdf'),
+        os.path.join(diretorio_trabalho, 'txt'),
+        os.path.join(diretorio_trabalho, 'jpg')
+    ]
+
+    # Chama a função para criar diretórios antes de mover arquivos
+    # Ordem é importante: criar estrutura antes de usar
+    criar_diretorios(diretorios)
+
+    # Chama a função para mover arquivos após garantir que os diretórios existem
+    mover_arquivos(diretorio_trabalho)
+
+# Ponto de entrada do script: executa main() apenas se o arquivo for executado diretamente
+# Permite importação do módulo sem executar o código automaticamente
+if __name__ == "__main__":
+    main()
+
+    print("Processamento concluído.")
+    exit(0)
+    

@@ -1,0 +1,83 @@
+# Importa Path do pathlib para manipulação moderna de caminhos de arquivo
+# Path oferece uma interface orientada a objetos para trabalhar com caminhos de forma cross-platform
+from pathlib import Path
+
+def main():
+    """
+    Coleta frases do usuário e salva em um arquivo com transformação para maiúsculas.
+    Demonstra interação com usuário, validação de entrada, manipulação de listas e operações de arquivo.
+    """
+    # Cria um objeto Path para o arquivo de saída
+    # Path("meu_arquivo.txt") representa o caminho de forma independente do sistema operacional
+    arquivo_path = Path("meu_arquivo.txt")
+
+    # Instruções para o usuário sobre como usar o programa
+    print("Digite suas frases. Digite 'sair' para terminar e salvar o arquivo.")
+    # Inicializa uma lista vazia para armazenar as frases
+    frases = []
+
+    # Loop infinito para coleta de entrada até o usuário digitar 'sair'
+    # while True cria um loop que continua até encontrar break
+    while True:
+        # input("> ") solicita entrada do usuário com prompt ">"
+        # .strip() remove espaços em branco do início e fim da string
+        entrada = input("> ").strip()
+        # Verifica se a entrada é 'sair' (case-insensitive com .lower())
+        if entrada.lower() == "sair":
+            break  # Sai do loop
+        # Verifica se a entrada não está vazia (evita adicionar linhas em branco)
+        if entrada:  # Ignora linhas vazias
+            # Adiciona a frase à lista usando append()
+            frases.append(entrada)
+
+    # Valida se há frases para salvar após o loop
+    # len(frases) == 0 verifica se a lista está vazia
+    if not frases:
+        print("Nenhuma frase foi digitada. Encerrando...")
+        return  # Encerra a função sem salvar
+
+    # Exibe as frases digitadas antes de salvar
+    # Cria uma seção visual com "="*50 (repetição de string)
+    print("\n" + "="*50)
+    print("FRASES DIGITADAS:")
+    print("="*50)
+    # enumerate(frases, 1) itera sobre a lista com índices começando em 1
+    for i, frase in enumerate(frases, 1):
+        # f-string para formatação: {i}. {frase} exibe número e frase
+        print(f"{i}. {frase}")
+    print("="*50 + "\n")
+
+    # Exibe as frases modificadas (em maiúsculas) após "sair"
+    # Demonstra a transformação que será aplicada ao salvar
+    print("="*50)
+    print("FRASES MODIFICADAS (MAIÚSCULAS):")
+    print("="*50)
+    for i, frase in enumerate(frases, 1):
+        # .upper() converte a string para maiúsculas
+        print(f"{i}. {frase.upper()}")
+    print("="*50 + "\n")
+
+    # Escreve e transforma em uma única operação
+    # Bloco try-except para tratamento de erros de I/O
+    try:
+        # Abre o arquivo em modo 'w' (write) com codificação UTF-8
+        # 'with' garante que o arquivo seja fechado automaticamente
+        with open(arquivo_path, "w", encoding="utf-8") as arquivo:
+            # Itera sobre cada frase na lista
+            for frase in frases:
+                # Escreve a frase em maiúsculas (.upper()) seguida de quebra de linha
+                arquivo.write(frase.upper() + "\n")
+
+        # Mensagens de sucesso após operação bem-sucedida
+        print(f"✓ Arquivo '{arquivo_path}' criado e modificado com sucesso!")
+        print(f"✓ Total de {len(frases)} frase(s) salva(s).")
+    except IOError as e:
+        # Trata erros específicos de entrada/saída (ex: disco cheio, permissões)
+        print(f"✗ Erro ao salvar arquivo: {e}")
+
+# Ponto de entrada condicional do script
+# Executa main() apenas se o arquivo for executado diretamente, não importado
+if __name__ == "__main__":
+    main()
+
+

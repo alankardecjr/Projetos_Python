@@ -1,0 +1,56 @@
+"""Exemplo simples de abertura e inspeção de um arquivo.
+
+Este script abre um arquivo em modo de leitura/escrita e exibe informações sobre o objeto arquivo.
+Demonstra o uso de gerenciadores de contexto, tratamento de exceções e propriedades de objetos arquivo.
+"""
+# Adiciona uma borda visual para destacar o início do programa
+# print() é usado para saída no console; strings podem ser repetidas com *
+print("=====================================================")
+print("|O programa começou, confirme as informações abaixo.|")
+print("=====================================================")
+
+# Solicita ao usuário o nome do arquivo que será criado
+# input() lê entrada do usuário; a string é o prompt exibido
+nome_arquivo = input("Digite o nome do arquivo que será criado: ")
+
+# Usa um gerenciador de contexto (with) para lidar com o arquivo
+# 'with' garante fechamento automático do arquivo, mesmo em caso de erro
+# Modo 'w+' cria o arquivo se não existir, permite leitura e escrita
+# encoding='utf-8' especifica codificação para suporte a caracteres especiais
+try:
+    with open(nome_arquivo, 'w+', encoding='utf-8') as arquivo:
+        # Obtém informações do objeto arquivo usando propriedades
+        # arquivo.name retorna o nome/caminho do arquivo
+        print(f"Nome do arquivo: {arquivo.name}")
+        # arquivo.mode retorna o modo de abertura ('w+', 'r', etc.)
+        print(f"Modo de abertura: {arquivo.mode}")
+        # arquivo.closed retorna True se fechado, False se aberto
+        print(f"Está fechado? {arquivo.closed}")
+
+        # Dentro do bloco 'with', o arquivo está aberto
+        # Isso demonstra que o arquivo é gerenciado pelo contexto
+        print("Dentro do bloco 'with': arquivo.closed =", arquivo.closed)
+
+# Trata exceções específicas de I/O (entrada/saída)
+# IOError abrange problemas como permissões, disco cheio, etc.
+except IOError as e:
+    print(f"Erro ao criar/abrir o arquivo: {e}")
+
+# Verifica se o arquivo foi realmente fechado após o bloco 'with'
+# A variável 'arquivo' ainda existe, mas o arquivo foi fechado automaticamente
+try:
+    print(f"Após o bloco, o arquivo está fechado? {arquivo.closed}")
+# NameError ocorre se a variável não foi definida (não entrou no try)
+except NameError:
+    print("Variável 'arquivo' não existe fora do contexto.")
+
+# Demonstração adicional de saída formatada
+# Bordas visuais ajudam na legibilidade do output
+print("=====================================================")
+print("|O programa terminou, confirme as informações acima.|")
+print("=====================================================")
+
+# exit() termina o programa explicitamente (opcional em scripts simples)
+# Código de saída 0 indica sucesso
+exit()
+

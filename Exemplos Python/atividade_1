@@ -1,0 +1,30 @@
+# Importa o módulo os para operações relacionadas ao sistema operacional
+# os.path fornece funções para manipulação de caminhos de arquivo
+import os
+
+# Abre o arquivo "dados1.txt" em modo de escrita ('w')
+# Se o arquivo não existir, será criado; se existir, será sobrescrito
+# encoding='utf-8' especifica a codificação de caracteres para suporte a acentos e caracteres especiais
+arquivo1 = open("dados1.txt", "w", encoding='utf-8')
+
+# Linha comentada: exemplo de caminho absoluto (comentado para evitar execução)
+# Caminhos absolutos começam da raiz do sistema; relativos são do diretório atual
+# arquivo2 = open("d:/OneDrive/yduqs/python/"
+#                 "manipulação de dados/exemplos1/dados1.txt")
+
+# Escreve a string "Olá, mundo!" no arquivo
+# write() adiciona texto ao arquivo; não adiciona quebra de linha automaticamente
+arquivo1.write("Olá, mundo!")
+
+# Imprime o caminho relativo do arquivo usando os.path.relpath()
+# relpath() converte um caminho para relativo ao diretório de trabalho atual
+# arquivo1.name contém o nome/caminho do arquivo passado para open()
+print(os.path.relpath(arquivo1.name))
+
+# Imprime a representação do objeto arquivo
+# Mostra informações como nome, modo e estado (aberto/fechado)
+print(arquivo1)
+
+# Fecha o arquivo explicitamente
+# É importante fechar arquivos para liberar recursos e garantir que dados sejam gravados
+arquivo1.close()

@@ -1,0 +1,49 @@
+def zenit_polar_replace(text):
+    """
+    Aplica a codificação ZENIT POLAR a um texto, substituindo letras específicas.
+    ZENIT POLAR é uma cifra de substituição simples onde certas letras são trocadas.
+    """
+    # Define uma lista de tuplas com pares (letra_original, letra_substituta)
+    # Inclui versões minúsculas e maiúsculas para case-sensitivity
+    replacements = [('z', 'p'), ('e', 'o'), ('n', 'l'), ('i', 'a'), ('t', 'r'),
+                    ('Z', 'P'), ('E', 'O'), ('N', 'L'), ('I', 'A'), ('T', 'R')]
+    # Itera sobre cada par de substituição
+    for old, new in replacements:
+        # Aplica a substituição usando o método replace de string
+        # replace() substitui todas as ocorrências de 'old' por 'new' no texto
+        text = text.replace(old, new)
+    # Retorna o texto modificado
+    return text
+
+def main():
+    """
+    Função principal: demonstra a aplicação da cifra ZENIT POLAR em uma frase.
+    Mostra processamento de strings, listas e operações de texto em Python.
+    """
+    # Define a frase original a ser codificada
+    # Usa uma frase em português para exemplo
+    phrase = "A raposa marrom veloz salta sobre o cachorro preguiçoso."
+    # Aplica title() para capitalizar a primeira letra de cada palavra
+    # title() é útil para formatação de texto, tornando a saída mais legível
+    phrase = phrase.title()
+
+    # Divide a frase em uma lista de palavras usando split()
+    # split() sem argumentos divide por espaços em branco
+    words = phrase.split()
+
+    # Usa list comprehension para processar cada palavra
+    # [expressão for item in lista] cria uma nova lista aplicando a expressão a cada item
+    # Aqui, aplica a função zenit_polar_replace a cada palavra
+    coded_words = [zenit_polar_replace(word) for word in words]
+
+    # Junta as palavras codificadas de volta em uma frase usando join()
+    # " ".join(lista) insere um espaço entre cada elemento da lista
+    coded_phrase = " ".join(coded_words)
+    # Exibe a frase original e a codificada para comparação
+    print("Original:", phrase)
+    print("Coded:", coded_phrase)
+
+# Verifica se o script está sendo executado diretamente (não importado)
+# Permite reutilização da função em outros módulos
+if __name__ == "__main__":
+    main()

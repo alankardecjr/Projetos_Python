@@ -1,0 +1,75 @@
+import os
+
+def processar_arquivo(arquivo_origem, arquivo_destino):
+    """
+    Lê o conteúdo de um arquivo de origem e escreve em um arquivo de destino com um cabeçalho.
+    Este é um exemplo de manipulação de arquivos em Python, demonstrando tratamento de exceções.
+    """
+    # Tentativa de abrir o arquivo de origem para leitura
+    # O bloco try-except é usado para capturar erros comuns como arquivo não encontrado ou problemas de permissão
+    try:
+        with open(arquivo_origem, 'r') as f_origem:
+            conteudo = f_origem.read()  # Lê todo o conteúdo do arquivo em uma string
+    except FileNotFoundError:
+        # Exceção específica para quando o arquivo não existe no caminho especificado
+        print(f"Arquivo {arquivo_origem} não encontrado.")
+        return  # Encerra a função se o arquivo não for encontrado
+    except PermissionError:
+        # Exceção para problemas de permissão de leitura
+        print(f"Sem permissão para ler {arquivo_origem}.")
+        return
+    except Exception as e:
+        # Captura qualquer outro erro inesperado durante a leitura
+        print(f"Erro inesperado ao ler {arquivo_origem}: {e}")
+        return
+
+    # Após ler com sucesso, tenta escrever no arquivo de destino
+    # Adiciona um cabeçalho antes do conteúdo original
+    try:
+        with open(arquivo_destino, 'w') as f_destino:
+            f_destino.write("Cabeçalho: Conteúdo do Arquivo\n")  # Escreve o cabeçalho
+            f_destino.write(conteudo)  # Escreve o conteúdo lido
+            print(f"Conteúdo escrito em {arquivo_destino}.")
+    except PermissionError:
+        # Problema de permissão para escrever no arquivo de destino
+        print(f"Sem permissão para escrever em {arquivo_destino}.")
+    except Exception as e:
+        # Outros erros durante a escrita
+        print(f"Erro inesperado ao escrever em {arquivo_destino}: {e}")
+
+def main():
+    """
+    Função principal: verifica e cria o diretório de trabalho se necessário, define caminhos e processa o arquivo.
+    Demonstra a importância de verificar a existência de diretórios antes de operações de arquivo.
+    """
+    diretorio_trabalho = "diretorio_trabalho"  # Define o nome do diretório de trabalho
+
+    # Verifica se o diretório existe; se não, cria-o
+    # Isso evita erros de "diretório não encontrado" em operações subsequentes
+    if not os.path.exists(diretorio_trabalho):
+        try:
+            os.makedirs(diretorio_trabalho)  # Cria o diretório e subdiretórios se necessário
+            print(f"Diretório {diretorio_trabalho} criado.")
+        except Exception as e:
+            # Trata erros na criação do diretório, como permissões insuficientes
+            print(f"Erro ao criar diretório {diretorio_trabalho}: {e}")
+            return  # Sai da função se não conseguir criar o diretório
+
+    # Constrói os caminhos completos para os arquivos usando os.path.join
+    # Isso garante compatibilidade entre sistemas operacionais (Windows usa \, Unix usa /)
+    arquivo_origem = os.path.join(diretorio_trabalho, "arquivo_origem.txt")
+    arquivo_destino = os.path.join(diretorio_trabalho, "arquivo_destino.txt")
+
+    # Chama a função de processamento com os caminhos definidos
+    processar_arquivo(arquivo_origem, arquivo_destino)
+
+# Verifica se o script está sendo executado diretamente (não importado como módulo)
+# Isso permite que o código seja reutilizado em outros programas
+if __name__ == "__main__":
+    main()
+
+# Mensagem final indicando o fim do programa
+# O exit(0) indica sucesso (código 0 é padrão para execução bem-sucedida)
+print("Programa finalizado.")
+exit(0)
+
