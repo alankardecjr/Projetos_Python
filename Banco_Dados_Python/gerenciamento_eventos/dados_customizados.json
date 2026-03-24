@@ -1,0 +1,19 @@
+{
+  "locais": [
+    ["Centro de Convenções ExpoCenter", "Av. das Nações, 5000 - São Paulo"],
+    ["Auditório da Universidade", "Rua da Ciência, 100 - Campus Central"],
+    ["Parque Tecnológico", "Rodovia do Conhecimento, Km 25 - Distrito Industrial"]
+  ],
+  "eventos": [
+    ["Congresso de IA", "2026-07-15", 1],
+    ["Workshop de Machine Learning", "2026-08-22", 2],
+    ["Hackathon Startup", "2026-09-10", 3]
+  ],
+  "participantes": [
+    ["Maria Santos", "maria.santos@empresa.com", 1],
+    ["João Pereira", "joao.pereira@univ.edu", 1],
+    ["Fernanda Lima", "fernanda.lima@startup.com", 2],
+    ["Carlos Mendes", "carlos.mendes@tech.com", 3],
+    ["Ana Costa", "ana.costa@inovacao.com", 3]
+  ]
+}

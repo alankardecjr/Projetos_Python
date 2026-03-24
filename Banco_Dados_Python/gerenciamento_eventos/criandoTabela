@@ -6,7 +6,7 @@ Este script cria um banco de dados SQLite para armazenar informações sobre loc
 
 import sqlite3
 
-def conectar_banco(nome_banco):
+def conectar_banco(Agenda_Eventos):
     """
     Conecta ao banco de dados SQLite especificado.
 
@@ -16,7 +16,7 @@ def conectar_banco(nome_banco):
     Returns:
         sqlite3.Connection: Objeto de conexão com o banco de dados.
     """
-    conexao = sqlite3.connect(nome_banco)
+    conexao = sqlite3.connect(Agenda_Eventos)
     return conexao
 
 def criar_tabelas(conexao):
