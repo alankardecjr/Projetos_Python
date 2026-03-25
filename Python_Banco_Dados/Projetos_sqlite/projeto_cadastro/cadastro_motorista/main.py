@@ -4,20 +4,30 @@ Script principal para o sistema de cadastro de motoristas.
 Executa a criação de tabelas e inserção de dados de forma otimizada.
 """
 
+import os
+import argparse
 from criandoTabela import criar_tabelas
 from inclusaoDados import inserir_pessoa_dinamicamente
 from inclusaoDadosClasse import inserir_marca_dinamicamente, inserir_veiculo_dinamicamente
 from modelo import Pessoa, Marca, Veiculo
 
-def main():
+DB_PATH = "./meu_banco.db"
+
+def main(reset=False):
     """
     Função principal que orquestra a criação do banco e inserção de dados.
     """
+    if reset:
+        if os.path.exists(DB_PATH):
+            os.remove(DB_PATH)
+            print(f"Banco de dados removido: {DB_PATH}")
+        else:
+            print(f"Banco de dados não existe ainda: {DB_PATH}")
+
     print("Iniciando criação do banco de dados...")
 
     # 1. Criar tabelas
     criar_tabelas()
-
     # 2. Inserir pessoas (dados fictícios)
     pessoas = [
         Pessoa(10000000099, 'João Silva', '1985-01-15', False),
@@ -78,4 +88,8 @@ def main():
     print("Banco de dados populado com sucesso!")
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Cadastro de motoristas com opção de reset do banco")
+    parser.add_argument("--reset", action="store_true", help="Apaga o banco de dados e recria as tabelas")
+    args = parser.parse_args()
+
+    main(reset=args.reset)

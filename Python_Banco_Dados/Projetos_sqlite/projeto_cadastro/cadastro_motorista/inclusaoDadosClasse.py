@@ -20,10 +20,19 @@ def inserir_marca_dinamicamente(marca):
     conexao = conector.connect("./meu_banco.db")
     cursor = conexao.cursor()
 
-    # Query dinâmica para Marca
-    comando = "INSERT INTO Marca (nome, sigla) VALUES (:nome, :sigla);"
+    # Query dinâmica para Marca (idempotente)
+    comando = "INSERT OR IGNORE INTO Marca (nome, sigla) VALUES (:nome, :sigla);"
     cursor.execute(comando, {'nome': marca.nome, 'sigla': marca.sigla})
-    marca_id = cursor.lastrowid
+
+    if cursor.rowcount == 0:
+        # marca já existe, recuperar id
+        cursor.execute("SELECT id FROM Marca WHERE sigla = ?", (marca.sigla,))
+        row = cursor.fetchone()
+        marca_id = row[0] if row else None
+        print(f"Marca {marca.nome} (sigla {marca.sigla}) já existe com ID {marca_id}.")
+    else:
+        marca_id = cursor.lastrowid
+        print(f"Marca {marca.nome} inserida com sucesso com ID {marca_id}.")
 
     conexao.commit()
     cursor.close()
@@ -42,9 +51,9 @@ def inserir_veiculo_dinamicamente(veiculo):
     conexao.execute("PRAGMA foreign_keys = on")  # Habilita chaves estrangeiras
     cursor = conexao.cursor()
 
-    # Query dinâmica para Veiculo
+    # Query dinâmica para Veiculo (idempotente)
     comando = """
-    INSERT INTO Veiculo (placa, ano, cor, motor, proprietario, marca)
+    INSERT OR IGNORE INTO Veiculo (placa, ano, cor, motor, proprietario, marca)
     VALUES (:placa, :ano, :cor, :motor, :proprietario, :marca);
     """
     valores = {
@@ -57,11 +66,14 @@ def inserir_veiculo_dinamicamente(veiculo):
     }
     cursor.execute(comando, valores)
 
+    if cursor.rowcount == 0:
+        print(f"Veículo {veiculo.placa} já existe e foi ignorado.")
+    else:
+        print(f"Veículo {veiculo.placa} inserido com sucesso!")
+
     conexao.commit()
     cursor.close()
     conexao.close()
-
-    print(f"Veículo {veiculo.placa} inserido com sucesso!")
 
 # Exemplo de uso
 if __name__ == "__main__":

@@ -18,10 +18,10 @@ def inserir_pessoa_dinamicamente(pessoa):
     conexao = conector.connect("./meu_banco.db")
     cursor = conexao.cursor()
 
-    # Query dinâmica: construção da query com placeholders
+    # Query dinâmica: construção da query com placeholders (idempotente)
     campos = ['cpf', 'nome', 'nascimento', 'oculos']
     placeholders = ':' + ', :'.join(campos)
-    comando = f"INSERT INTO Pessoa ({', '.join(campos)}) VALUES ({placeholders});"
+    comando = f"INSERT OR IGNORE INTO Pessoa ({', '.join(campos)}) VALUES ({placeholders});"
 
     # Mapeamento dos valores
     valores = {
@@ -33,6 +33,10 @@ def inserir_pessoa_dinamicamente(pessoa):
 
     # Execução do comando
     cursor.execute(comando, valores)
+    if cursor.rowcount == 0:
+        print(f"Pessoa {pessoa.nome} (CPF {pessoa.cpf}) já existe e foi ignorada.")
+    else:
+        print(f"Pessoa {pessoa.nome} inserida com sucesso!")
 
     # Efetivação do comando
     conexao.commit()
