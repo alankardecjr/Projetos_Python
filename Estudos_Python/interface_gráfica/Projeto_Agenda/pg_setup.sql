@@ -1,0 +1,9 @@
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname='admin') THEN
+        CREATE ROLE admin LOGIN PASSWORD '1234';
+    ELSE
+        ALTER ROLE admin WITH LOGIN PASSWORD '1234';
+    END IF;
+END
+$$;
