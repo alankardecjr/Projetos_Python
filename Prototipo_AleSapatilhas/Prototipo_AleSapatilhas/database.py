@@ -179,6 +179,24 @@ def listar_vendas_controle():
     conn.close()
     return dados
 
+# --- FUNÇÕES DE ATUALIZAÇÃO ---
+
+def atualizar_cliente(id, nome, telefone, aniversario, tamanho, logra, num, bairro, cidade, ref, obs, status):
+    conn = conectar(); cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE clientes SET nome=?, telefone=?, aniversario=?, tamanho_cliente=?, logradouro=?, 
+        numero=?, bairro=?, cidade=?, ponto_referencia=?, observacao=?, status_cliente=?
+        WHERE id=?""", (nome, telefone, aniversario, tamanho, logra, num, bairro, cidade, ref, obs, status, id))
+    conn.commit(); conn.close()
+
+def atualizar_item(id, produto, cor, tamanho, custo, venda, quantidade, categoria, fornecedor, status):
+    conn = conectar(); cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE itens SET produto=?, cor=?, tamanho=?, precocusto=?, precovenda=?, 
+        quantidade=?, categoria=?, fornecedor=?, status_item=? WHERE id=?""",
+        (produto, cor, tamanho, custo, venda, quantidade, categoria, fornecedor, status, id))
+    conn.commit(); conn.close()
+
 # --- RELATÓRIOS E ESTOQUE ---
 
 def relatorio_lucro_detalhado():
