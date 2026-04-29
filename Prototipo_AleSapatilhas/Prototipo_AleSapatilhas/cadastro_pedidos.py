@@ -1,12 +1,13 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+import sqlite3
 import database
 
 class JanelaCadastroPedidos(tk.Toplevel):
     def __init__(self, master, dados_venda):
         super().__init__(master)
                
-        # --- PALETA DE CORES ---
+         # --- PALETA DE CORES ---
         self.bg_fundo = "#f4f5f9"
         self.bg_card = "#ffffff"
         self.cor_borda = "#d1d5db"

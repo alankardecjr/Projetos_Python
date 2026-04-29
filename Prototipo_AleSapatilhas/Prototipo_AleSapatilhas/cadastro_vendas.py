@@ -1,12 +1,27 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
+import sqlite3
 import database 
 
 class JanelaCadastroVendas(tk.Toplevel):
     def __init__(self, master, cliente_id, nome_cliente):
         super().__init__(master)
+
+        # --- PALETA DE CORES ---
+        self.bg_fundo = "#f4f5f9"
+        self.bg_card = "#ffffff"
+        self.cor_borda = "#d1d5db"
+        self.cor_texto = "#1f2937"
+        self.cor_lbl = "#4b5563"
+        self.cor_btn_1 = "#4b5563"   
+        self.cor_btn_2 = "#374151"   
+        self.cor_btn_sair = "#1f2937" 
+        self.cor_hover_field = "#3b82f6"   
+        self.cor_hover_btn = "#6b7280"
+
+
         self.title("Alê Sapatilhas - Painel de Venda")
-        self.geometry("500x650")
+        self.geometry("500x750")
         self.resizable(False, False)
         self.configure(bg="#f4f5f9")
         

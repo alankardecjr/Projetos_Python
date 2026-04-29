@@ -6,11 +6,8 @@ import database
 class JanelaCadastroClientes(tk.Toplevel):
     def __init__(self, master, dados_cliente=None, callback_venda=None):
         super().__init__(master)
-        self.title("Alê Sapatilhas - Cadastro de Clientes")
-        self.geometry("450x750") 
-        self.resizable(False, False)
-        
-        # Paleta de Cores
+
+  # --- PALETA DE CORES ---
         self.bg_fundo = "#f4f5f9"
         self.bg_card = "#ffffff"
         self.cor_borda = "#d1d5db"
@@ -20,14 +17,19 @@ class JanelaCadastroClientes(tk.Toplevel):
         self.cor_btn_2 = "#374151"   
         self.cor_btn_sair = "#1f2937" 
         self.cor_hover_field = "#3b82f6"   
-        self.cor_hover_btn = "#6b7280" 
+        self.cor_hover_btn = "#6b7280"
 
+        self.title("Alê Sapatilhas - Cadastro de Clientes")
+        self.geometry("450x750")
         self.configure(bg=self.bg_fundo)
+        self.resizable(False, False)
+
+        #Dados do cliente: (id, nome, tel, niver, tam, logra, num, bairro, cidade, ref, obs, status)
         self.cliente_id = None
         self.callback_venda = callback_venda 
-
         self.criar_widgets()
         
+        # Se dados do cliente forem passados, preenche os campos para edição
         if dados_cliente:
             self.preencher_dados(dados_cliente)            
      
@@ -83,25 +85,26 @@ class JanelaCadastroClientes(tk.Toplevel):
 
         # --- CAMPOS COMPACTADOS ---
         self.ent_nome = criar_campo(main_frame, "NOME COMPLETO*", 1)
-        self.ent_tel = criar_campo(main_frame, "TELEFONE / WHATSAPP*", 3)      
-      
-        self.ent_logra = criar_campo(main_frame, "LOGRADOURO", 7, col=0, colspan=1)
-        self.ent_num = criar_campo(main_frame, "Nº", 7, col=1, colspan=1)
-        
-        self.ent_bairro = criar_campo(main_frame, "BAIRRO", 9, col=0, colspan=1)
-        self.ent_cidade = criar_campo(main_frame, "CIDADE", 9, col=1, colspan=1)
-        
-        self.ent_ref = criar_campo(main_frame, "REFERÊNCIA", 11)
+        self.ent_tel = criar_campo(main_frame, "TELEFONE / WHATSAPP*", 3) 
 
-        # Linha dupla para economizar altura
         # Linha dupla: Aniversário e Tamanho do Pé
         self.ent_niver = criar_campo(main_frame, "ANIVERSÁRIO (DD/MM)", 5, col=0, colspan=1)
         self.ent_tam = criar_campo(main_frame, "TAM. PÉ", 5, col=1, colspan=1)
+     
+        # Linha dupla: Logradouro e Número 
+        self.ent_logra = criar_campo(main_frame, "LOGRADOURO", 7, col=0, colspan=1)
+        self.ent_num = criar_campo(main_frame, "Nº", 7, col=1, colspan=1)
+
+        # Linha dupla: Bairro e Cidade        
+        self.ent_bairro = criar_campo(main_frame, "BAIRRO", 9, col=0, colspan=1)
+        self.ent_cidade = criar_campo(main_frame, "CIDADE", 9, col=1, colspan=1)    
+
+        # Campo de Referência com largura maior para acomodar descrições mais longas
+        self.ent_ref = criar_campo(main_frame, "REFERÊNCIA", 11)
 
         # Dica: Definir uma largura fixa para os campos não "esticarem" demais
         self.ent_niver.config(width=15)
         self.ent_tam.config(width=10)
-
         
         # Observação como Entry simples em vez de Text para salvar espaço vertical
         self.ent_obs = criar_campo(main_frame, "OBSERVAÇÕES", 13)
@@ -120,14 +123,14 @@ class JanelaCadastroClientes(tk.Toplevel):
         btn_frame = tk.Frame(main_frame, bg=self.bg_fundo)
         btn_frame.grid(row=17, column=0, columnspan=2, pady=(20, 5))
 
-        self.btn_salvar = tk.Button(btn_frame, text="SALVAR", bg=self.cor_btn_1, fg="white", 
+        self.btn_salvar = tk.Button(btn_frame, text="SALVAR DADOS", bg=self.cor_btn_1, fg="white", 
                                     font=("Segoe UI", 9, "bold"), width=15, relief="flat", cursor="hand2", 
                                     command=self.salvar_e_sair)
         self.btn_salvar.pack(side="left", padx=5, ipady=6)
         self.btn_salvar.bind("<Enter>", lambda e: ao_entrar_botao(e, self.cor_hover_btn))
         self.btn_salvar.bind("<Leave>", lambda e: ao_sair_botao(e, self.cor_btn_1))
 
-        self.btn_venda = tk.Button(btn_frame, text="VENDER", bg=self.cor_btn_2, fg="white", 
+        self.btn_venda = tk.Button(btn_frame, text="GERAR VENDA", bg=self.cor_btn_2, fg="white", 
                                     font=("Segoe UI", 9, "bold"), width=15, relief="flat", cursor="hand2", 
                                     command=self.salvar_e_vender)
         self.btn_venda.pack(side="left", padx=5, ipady=6)
@@ -135,8 +138,8 @@ class JanelaCadastroClientes(tk.Toplevel):
         self.btn_venda.bind("<Leave>", lambda e: ao_sair_botao(e, self.cor_btn_2))
 
         # Botão Cancelar agora com maior destaque visual no fundo
-        self.btn_cancelar = tk.Button(main_frame, text="SAIR", bg=self.cor_btn_sair, fg="white", 
-                                        font=("Segoe UI", 9, "bold"), width=30, relief="flat", cursor="hand2", 
+        self.btn_cancelar = tk.Button(main_frame, text="CANCELAR", bg=self.cor_btn_sair, fg="white", 
+                                        font=("Segoe UI", 9, "bold"), width=32, relief="flat", cursor="hand2", 
                                         command=self.fechar_limpar)
         self.btn_cancelar.grid(row=18, column=0, columnspan=2, pady=(10, 0), ipady=5)
         self.btn_cancelar.bind("<Enter>", lambda e: ao_entrar_botao(e, "#374151"))
